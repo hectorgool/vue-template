@@ -10,23 +10,24 @@ var app = new Vue({
     startingResult: ''
   },
   watch: {
-    startingTerm: function() {
+    startingTerm: function () {
       this.startingResult = ''
-      if (this.startingTerm.length == 5) {
+      if (this.startingTerm.length === 5) {
         this.searchTerm()
       }
     }
   },
   methods: {
-    searchTerm: _.debounce(function() {
+    searchTerm: _.debounce(function () {
       var self = this
-      self.startingResult = "Searching..."
+      self.startingResult = 'Searching...'
       axios.get('http://ziptasticapi.com/' + self.startingTerm)
         .then(function (response) {
           self.startingResult = response.data.city + ', ' + response.data.state
         })
         .catch(function (error) {
-          self.startingResult = "Invalid Zipcode"
+          console.log(error)
+          self.startingResult = 'Invalid Zipcode'
         })
     }, 500)
   }

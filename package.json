@@ -1,0 +1,23 @@
+{
+  "name": "vue-template",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "standard",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hectorgool/vue-template.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hectorgool/vue-template/issues"
+  },
+  "homepage": "https://github.com/hectorgool/vue-template#readme",
+  "devDependencies": {
+    "standard": "^10.0.0"
+  }
+}
