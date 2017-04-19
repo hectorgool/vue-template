@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Vue.js Tutorial | API Example</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+  </head>
+
+  <body>
+    <div id="app">
+      <div class="container">
+
+        <form @submit.prevent="validateBeforeSubmit">
+
+          <div class="column is-12">
+              <label class="label">Title</label>
+              <p class="control has-icon has-icon-right">
+                  <input name="title" v-model="title" v-validate:title.initial="'required|alpha'" :class="{'input': true, 'is-danger': errors.has('title') }" type="text" placeholder="Title">
+                  <i v-show="errors.has('title')" class="fa fa-warning"></i>
+                  <span v-show="errors.has('title')" class="help is-danger">{{ errors.first('title') }}</span>
+              </p>
+          </div>
+
+            <div class="column is-12">
+                <label class="label">Body</label>
+                <p class="control has-icon has-icon-right">
+                    <input name="body" v-model="body" v-validate:body.initial="'required|alpha'" :class="{'input': true, 'is-danger': errors.has('body') }" type="text" placeholder="Body">
+                    <i v-show="errors.has('body')" class="fa fa-warning"></i>
+                    <span v-show="errors.has('body')" class="help is-danger">{{ errors.first('body') }}</span>
+                </p>
+            </div>
+
+            <div class="column is-12">
+                <p class="control">
+                    <button class="button is-primary" type="submit">Submit</button>
+                </p>
+            </div>
+        </form>
+
+      </div> <!-- end of .container -->
+    </div> <!-- end of #app -->
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.6/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/vee-validate/2.0.0-beta.25/vee-validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.0/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
+    <script>
+
+    Vue.use(VeeValidate);
+    new Vue({
+      name: 'form-validate',
+      data: () => ({
+          title: '',
+          body: '',
+      }),
+      methods: {
+          validateBeforeSubmit() {
+              this.$validator.validateAll().then(() => {
+                  // eslint-disable-next-line
+                  this.sendData();
+                  console.log('From Submitted!');
+              }).catch(() => {
+                  // eslint-disable-next-line
+                  console.log('Correct them errors!');
+              });
+          },
+          sendData: function () {
+            var self = this;
+            $.ajax({
+              method: 'POST',
+              data: {
+                title: self.title,
+                body: self.body,
+                userId: 1
+              },
+              url: 'http://jsonplaceholder.typicode.com/posts',
+              success: function(res) {
+                console.log(res);
+              },
+              error: function(res) {
+                console.log(res);
+              }
+            })
+          }
+      }
+    }).$mount('#app');
+
+    </script>
+  </body>
+</html>

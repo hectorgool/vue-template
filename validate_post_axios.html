@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Vue.js Tutorial | API Example</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+  </head>
+
+  <body>
+    <div id="app">
+      <div class="container">
+        <form @submit.prevent="validateBeforeSubmit">
+
+          <div class="form-group has-feedback"  v-bind:class="{'has-error':errors.first('title')}">
+            <label class="control-label" for="inputError2">{{ errors.first('title') }}</label>
+            <input
+              name="title"
+              type="text"
+              placeholder="Title"
+              class="form-control input-lg"
+              id="tile"
+              aria-describedby="inputError2Status"
+              v-model="title"
+              v-validate:title.initial="'required|alpha'"
+            >
+            <span v-show="errors.has('title')" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+            <span id="inputError2Status" class="sr-only">(error)</span>
+          </div>
+
+          <div class="form-group has-feedback"  v-bind:class="{'has-error':errors.first('body')}">
+            <label class="control-label" for="inputError2">{{ errors.first('body') }}</label>
+            <input
+              name="body"
+              type="text"
+              placeholder="body"
+              class="form-control input-lg"
+              id="tile"
+              aria-describedby="inputError2Status"
+              v-model="body"
+              v-validate:body.initial="'required|alpha'"
+            >
+            <span v-show="errors.has('body')" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+            <span id="inputError2Status" class="sr-only">(error)</span>
+          </div>
+
+          <button class="btn btn-default btn-lg btn-block" type="submit">Submit</button>
+
+        </form>
+
+      </div> <!-- end of .container -->
+    </div> <!-- end of #app -->
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.6/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/vee-validate/2.0.0-beta.25/vee-validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.0/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
+    <script>
+
+    Vue.use(VeeValidate);
+    new Vue({
+      name: 'form-validate',
+      data: () => ({
+          title: '',
+          body: '',
+      }),
+      methods: {
+          validateBeforeSubmit() {
+              this.$validator.validateAll().then(() => {
+                  // eslint-disable-next-line
+                  //this.sendData();
+                  this.axiosPost();
+                  console.log('From Submitted!');
+              }).catch(() => {
+                  // eslint-disable-next-line
+                  console.log('Correct them errors!');
+              });
+          },
+          axiosPost() {
+            var self = this;
+            axios.post('http://jsonplaceholder.typicode.com/posts', {
+              title: self.title,
+              body: self.body,
+              userId: 1
+            })
+            .then(res => {
+              console.log(res)
+            })
+            .catch(e => {
+              console.log(e)
+            })
+          }
+      }
+    }).$mount('#app');
+
+    </script>
+  </body>
+</html>
